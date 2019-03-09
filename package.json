@@ -1,11 +1,20 @@
 {
   "name": "cold-deck",
-  "version": "1.0.0",
+  "version": "0.0.0-development",
   "description": "logs module",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "semantic-release": "semantic-release"
   },
   "author": "neilkalman@gmail.com",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "semantic-release-cli": "^4.1.0",
+    "semantic-release": "^15.13.3"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Kibibit/cold-deck.git"
+  }
 }
