@@ -5,13 +5,51 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "semantic-release": "semantic-release"
+    "semantic-release": "semantic-release",
+    "contributors:add": "all-contributors add",
+    "contributors:generate": "all-contributors generate",
+    "update:dep": "npm-check"
   },
   "author": "neilkalman@gmail.com",
   "license": "MIT",
+  "release": {
+    "branches": [
+      "+([1-9])?(.{+([1-9]),x}).x",
+      "master",
+      {
+        "name": "beta",
+        "prerelease": true
+      },
+      {
+        "name": "next",
+        "prerelease": true
+      }
+    ],
+    "plugins": [
+      "@semantic-release/release-notes-generator",
+      "@semantic-release/github",
+      "@semantic-release/npm",
+      [
+        "@semantic-release/git",
+        {
+          "assets": [
+            "package.json"
+          ],
+          "message": "chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
+        }
+      ]
+    ]
+  },
   "devDependencies": {
+    "@semantic-release/commit-analyzer": "^6.1.0",
+    "@semantic-release/git": "^7.1.0-beta.3",
+    "@semantic-release/github": "^5.2.10",
+    "@semantic-release/npm": "^5.1.4",
+    "@semantic-release/release-notes-generator": "^7.1.4",
+    "all-contributors-cli": "^6.1.2",
+    "npm-check": "^5.9.0",
     "semantic-release-cli": "^4.1.0",
-    "semantic-release": "^15.13.3"
+    "semantic-release": "^16.0.0-beta.18"
   },
   "repository": {
     "type": "git",
