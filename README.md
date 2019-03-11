@@ -12,7 +12,7 @@
 </p>
 <hr>
 
-Heavy inspired by Scribe.js
+Heavly inspired by Scribe.js
 
 **WIP**
 
