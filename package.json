@@ -1,6 +1,6 @@
 {
   "name": "@kibibit/cold-deck",
-  "version": "1.0.0-next.1",
+  "version": "1.0.0-next.2",
   "description": "logs module",
   "main": "index.js",
   "scripts": {
