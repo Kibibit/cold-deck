@@ -1,15 +1,38 @@
-import { coldDeck } from "./cold-deck";
-import { logger } from './expressLogger';
+import { kbEnv } from './env.service';
+import { ColdDeck } from "./cold-deck";
+import * as admin from "firebase-admin";
 
-const nice = coldDeck;
+kbEnv.config();
 
-const console = nice.createBasic();
+console.log('got the host?', process.env.DB_HOST);
 
-console.info('this is from the test file!');
+const serviceAccount = require(process.env.FIREBASE_CREDENTIAL_FILE || '');
 
-const c = nice.child({ label: 'pizza' });
+if (!process.env.PROJECT_ID) { throw new Error('project id must be defined'); }
 
-c.info('this is a child!', { service: 'tits', ass: 'is nice' });
+const firebaseSettings = {
+  // FIREBASE
+  apiKey: process.env.API_KEY,
+  authDomain: process.env.AUTH_DOMAIN,
+  databaseURL: process.env.DATABASE_URL,
+  projectId: process.env.PROJECT_ID,
+  storageBucket: process.env.STORAGE_BUCKET,
+  messagingSenderId: process.env.MESSAGING_SENDER_ID,
+  credential: admin.credential.cert(serviceAccount)
+};
+
+const basicLogger = new ColdDeck({
+  path: './logs',
+  firebase: firebaseSettings
+});
+
+const nana = basicLogger.createBasic({ persist: true });
+
+nana.info('this is from the test file!');
+
+const childLogger = basicLogger.child({ persist: true });
+
+childLogger.info('this is a child!', { service: 'tits', ass: 'is nice' });
 
 
 /* jshint -W098 */
@@ -17,13 +40,17 @@ c.info('this is a child!', { service: 'tits', ass: 'is nice' });
   const express = require('express'),
     app = express();
 
-  app.set('port', (process.env.PORT || 5000));
+  app.set('port', 11109);
 
-  app.use(logger()); //Log each request
+  app.use(basicLogger.expressLogger({ persist: true })); //Log each request
 
   var port = app.get("port");
 
+  app.get('/', function (req, res) {
+    res.send('hello world');
+  });
+
   app.listen(port, function () {
-    console.info('Server listening at port ' + port);
+    nana.info('Server listening at port ' + port);
   });
 })();
