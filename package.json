@@ -1,10 +1,11 @@
 {
   "name": "@kibibit/cold-deck",
-  "version": "1.0.0",
+  "version": "1.1.0-next.1",
   "description": "logs module",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "test:tmp": "NODE_ENV=test ts-node src/cold-deck.test.ts",
     "semantic-release": "semantic-release",
     "contributors:add": "all-contributors add",
     "contributors:generate": "all-contributors generate",
@@ -62,7 +63,9 @@
   "dependencies": {
     "callsite": "^1.0.0",
     "colors": "^1.3.3",
+    "dotenv": "^7.0.0",
     "express": "^4.16.4",
+    "firebase-admin": "^7.0.0",
     "lodash": "^4.17.11",
     "mkdirp": "^0.5.1",
     "moment": "^2.24.0",

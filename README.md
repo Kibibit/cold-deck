@@ -5,6 +5,10 @@
   </h2>
 </p>
 <p align="center">
+  <a href="https://www.npmjs.com/package/@kibibit/cold-deck"><img src="https://img.shields.io/npm/v/@kibibit/cold-deck/latest.svg?style=for-the-badge&logo=npm&color=CB3837"></a>
+</p>
+<p align="center">
+  <a href="https://www.npmjs.com/package/@kibibit/cold-deck"><img src="https://img.shields.io/npm/v/@kibibit/cold-deck/next.svg?style=flat-square&logo=npm&color=CB3837"></a>
   <a href="https://salt.bountysource.com/teams/kibibit"><img src="https://img.shields.io/endpoint.svg?url=https://monthly-salt.now.sh/kibibit&style=flat-square"></a>
 </p>
 <p align="center">
@@ -12,9 +16,17 @@
 </p>
 <hr>
 
-Heavly inspired by Scribe.js
+(**WIP** - this is still a work in progress)
 
-**WIP**
+Heavly inspired by [**Scribe.js**]()
+
+Node.js logging made simple!
+
+- works on top of [winston]()
+- saves logs to /logs folder
+- built in express logger
+- built in table logger
+- ability to save logs to firebase DB
 
 ## Contributing
 
