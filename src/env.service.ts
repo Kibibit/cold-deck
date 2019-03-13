@@ -1,5 +1,5 @@
-import { resolve } from 'path';
 import dotenv from 'dotenv';
+import { resolve } from 'path';
 
 const mode = process.env.NODE_ENV;
 

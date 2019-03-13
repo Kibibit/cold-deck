@@ -3,3 +3,4 @@ logs/
 .env*
 firebase-*
 package-lock.json
+dist/
