@@ -9,8 +9,16 @@ notifications:
   email: false
 script:
   - npm run test
+stages:
+  - compile
+  # - test
+  - deploy
 jobs:
   include:
+    - stage: compile
+      node_js: lts/*
+      script:
+        - npm run build
     - stage: release
       node_js: lts/*
       script:
