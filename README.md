@@ -9,6 +9,12 @@
 </p>
 <p align="center">
   <a href="https://www.npmjs.com/package/@kibibit/cold-deck"><img src="https://img.shields.io/npm/v/@kibibit/cold-deck/next.svg?style=flat-square&logo=npm&color=CB3837"></a>
+  <a href="https://travis-ci.org/Kibibit/cold-deck">
+  <img src="https://travis-ci.org/Kibibit/cold-deck.svg?branch=master">
+  </a>
+  <a href="https://coveralls.io/github/Kibibit/cold-deck?branch=master">
+  <img src="https://coveralls.io/repos/github/Kibibit/cold-deck/badge.svg?branch=master">
+  </a>
   <a href="https://salt.bountysource.com/teams/kibibit"><img src="https://img.shields.io/endpoint.svg?url=https://monthly-salt.now.sh/kibibit&style=flat-square"></a>
 </p>
 <p align="center">
