@@ -1,133 +1,54 @@
-import * as winston from 'winston';
-import { isNil, map, isString, get, uniqueId } from 'lodash';
-import colors from 'colors';
-import { blue, bgBlue, bgGreen, green, yellow, red } from 'colors';
-import moment from 'moment';
+import * as admin from 'firebase-admin';
+import { get, isNil } from 'lodash';
 import path from 'path';
-import { isObject } from 'util';
-import * as admin from "firebase-admin";
-import { KbFirebaseTransport } from './firebase.transport';
+import * as winston from 'winston';
+
+import { coldDeckDefaultOptions, firebaseAppMapper, kbDefaultLogLevels, kbFormatters } from './consts';
 import { createExpressLogger } from './expressLogger';
-
-const firebaseAppMapper = {};
-
-interface KbLogger extends winston.Logger {
-  table?: () => any;
-}
-
-interface KbFirebaseOptions extends admin.AppOptions {
-  projectId: string;
-  collectionName?: string;
-}
-
-interface ColdDeckOptions {
-  path: string;
-  createDefaultConsole: boolean;
-  firebase?: KbFirebaseOptions;
-}
-
-export interface KbLoggerOptions {
-  transports?: any[];
-  persist?: boolean;
-  scope?: string | { msg: string; colors: string; }
-}
-
-const myCustomLevels = {
-  levels: {
-    error: 0,
-    warn: 1,
-    info: 2,
-    verbose: 3,
-    debug: 4,
-    silly: 5
-  },
-  colors: {
-    verbose: bgGreen,
-    silly: bgBlue,
-    info: blue,
-    debug: green,
-    warn: yellow,
-    error: red
-  }
-};
-
-const consolePrettyPrint = winston.format.printf(({ level, message, scope, timestamp, tags }) => {
-  // console.log('the level is ', myCustomLevels.levels[ level ]);
-  const parsedTimestamp = moment(timestamp).format('YYYY-MM-DD [||] HH:mm:ss');
-  let parsedLabel = parseScope(scope);
-  parsedLabel = parsedLabel ? ` ${ parsedLabel }` : '';
-
-  // console.log('TAGS!', tags);
-
-  const parsedTags = map(tags, (tag) => colors[ tag.colors ](`[${ tag.msg }]`));
-
-  // console.log('parsed tags:');
-  // console.log(parsedTags);
-
-  return `${ green(parsedTimestamp) } ${ myCustomLevels.colors[ level ](level.toUpperCase()) }${ parsedLabel }${ parsedTags.length ? ' - ' + parsedTags.join('') : '' }: ${ message }`;
-
-  function parseScope(scope: string | { msg: string; colors: string }) {
-    if (isString(scope)) {
-      return colors.bgWhite.magenta(`${ scope.toUpperCase() }`);
-    }
-
-    if (isObject(scope)) {
-      const scopeColors = get(colors, scope.colors) || colors.bgWhite.magenta;
-
-      return scopeColors(`${ scope.msg.toUpperCase() }`);
-    }
-
-    return '';
-  }
-});
-
-const addKeyToInfo = winston.format((info) => {
-  info.key = uniqueId(info.timestamp.replace(/\..*$/, '') + `::${ info.scope.msg ? info.scope.msg : info.scope }::`);
-
-  return info;
-});
-
-export const kbFormatters = {
-  consolePrettyPrint,
-  addKeyToInfo
-};
-
-const defaultOptions: ColdDeckOptions = {
-  path: 'logs',
-  createDefaultConsole: true
-};
+import { KbFirebaseTransport } from './firebase.transport';
+import { KbColdDeckOptions, KbLogger, KbLoggerOptions } from './interfaces';
 
 export class ColdDeck {
-  // a user can create multiple consoles.
-  consoles = [];
-  mainConsole;
-  globalOptions: ColdDeckOptions;
+  /* All the loggers created with cold deck. holds all child loggers */
+  static consoles = [];
+  /* A Pointer to the main logger created with cold deck. */
+  static mainConsole: ColdDeck;
+  /* holds the global options inherited by all child loggers */
+  globalOptions: KbColdDeckOptions;
+  /* if logs should be backed up to a firebase DB, this will hold the firebase app instance */
   firebaseApp: admin.app.App | undefined;
 
-  constructor(options?: Partial<ColdDeckOptions>) {
+  constructor(options?: Partial<KbColdDeckOptions>) {
     options = isNil(options) ? {} : options;
 
-    options = Object.assign({}, defaultOptions, options);
+    options = Object.assign({}, coldDeckDefaultOptions, options);
 
-    this.globalOptions = options as ColdDeckOptions;
+    this.globalOptions = options as KbColdDeckOptions;
 
     const existingDBId = get(this.globalOptions, 'firebase.projectId');
     if (options.firebase && existingDBId && !firebaseAppMapper[ existingDBId ]) {
       firebaseAppMapper[ existingDBId ] = admin.initializeApp(options.firebase, options.firebase.projectId);
       this.firebaseApp = firebaseAppMapper[ existingDBId ];
-
-      console.log('created a firebase app!');
     }
   }
 
+  /**
+   * Get the express logger to attach as an express middleware
+   */
   expressLogger(options?: KbLoggerOptions) {
     return createExpressLogger(this, options);
   }
 
+  /**
+   * Create a new child logger based on this instance of ColdDeck
+   */
   child(options: KbLoggerOptions) {
     return this.createBasic(options);
   }
 
+  /**
+   * Create a basic logger that will act as the main logger
+   */
   createBasic(options?: KbLoggerOptions): KbLogger {
     options = options || {};
 
@@ -140,7 +61,7 @@ export class ColdDeck {
 
     const newLogger: winston.Logger = winston.createLogger({
       level: 'info',
-      levels: myCustomLevels.levels,
+      levels: kbDefaultLogLevels.levels,
       format,
       defaultMeta: { scope: options.scope || 'global' },
       transports: options.transports || [
@@ -169,7 +90,7 @@ export class ColdDeck {
       newLogger.add(consoleTransport);
     }
 
-    this.mainConsole = this.mainConsole || newLogger;
+    // this.mainConsole = this.mainConsole || newLogger;
 
     // add a table option:
     (newLogger as KbLogger).table = () => { };
@@ -180,7 +101,7 @@ export class ColdDeck {
     return kbLogger;
   }
 
-  initializeFirebase(logger: winston.Logger) {
+  private initializeFirebase(logger: winston.Logger) {
     if (!this.firebaseApp || !this.globalOptions.firebase) { return; }
 
     const db = this.firebaseApp.database();

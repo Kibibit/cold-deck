@@ -1,6 +1,7 @@
+import * as admin from 'firebase-admin';
+
+import { ColdDeck } from './cold-deck';
 import { kbEnv } from './env.service';
-import { ColdDeck } from "./cold-deck";
-import * as admin from "firebase-admin";
 
 kbEnv.config();
 

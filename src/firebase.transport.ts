@@ -1,8 +1,8 @@
-const Transport = require('winston-transport');
-const util = require('util');
-
 import * as firebase from 'firebase-admin';
 import { omit } from 'lodash';
+
+const Transport = require('winston-transport');
+
 //
 // Inherit from `winston-transport` so you can take advantage
 // of the base functionality and `.exceptions.handle()`.

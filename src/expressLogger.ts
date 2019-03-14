@@ -1,6 +1,8 @@
-import * as winston from 'winston';
-import { ColdDeck, KbLoggerOptions } from './cold-deck';
 import path from 'path';
+import * as winston from 'winston';
+
+import { ColdDeck } from './cold-deck';
+import { KbLoggerOptions } from './interfaces';
 
 export function createExpressLogger(coldDeck: ColdDeck, options: KbLoggerOptions = {}) {
   const kbConsole = coldDeck.child({
