@@ -10,18 +10,19 @@ notifications:
 script:
   - npm run test
 stages:
-  - compile
+  # - compile
   # - test
   - deploy
 jobs:
   include:
-    - stage: compile
-      node_js: lts/*
-      script:
-        - npm run build
+    # - stage: compile
+    #   node_js: lts/*
+    #   script:
+    #     - npm run build
     - stage: release
       node_js: lts/*
       script:
+        - npm run build
         - npm run semantic-release
 branches:
   except:
