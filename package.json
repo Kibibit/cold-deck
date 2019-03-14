@@ -1,6 +1,6 @@
 {
   "name": "@kibibit/cold-deck",
-  "version": "1.2.0-next.1",
+  "version": "1.2.0",
   "description": "logs module",
   "types": "dist/index.d.ts",
   "main": "dist/index.js",
