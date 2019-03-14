@@ -4,3 +4,5 @@ logs/
 firebase-*
 package-lock.json
 lib/
+coverage/
+test-report.html

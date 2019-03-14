@@ -11,14 +11,14 @@ script:
   - npm run test
 stages:
   # - compile
-  # - test
+  - test
   - deploy
 jobs:
   include:
-    # - stage: compile
-    #   node_js: lts/*
-    #   script:
-    #     - npm run build
+    - stage: test
+      node_js: lts/*
+      script:
+        - npm run coveralls
     - stage: release
       node_js: lts/*
       script:
