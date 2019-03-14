@@ -1,9 +1,12 @@
 {
   "name": "@kibibit/cold-deck",
-  "version": "1.2.0",
+  "version": "1.2.0-next.2",
   "description": "logs module",
-  "types": "dist/index.d.ts",
-  "main": "dist/index.js",
+  "types": "lib/index.d.ts",
+  "main": "lib/index.js",
+  "files": [
+    "/lib"
+  ],
   "scripts": {
     "build": "tsc",
     "test": "echo \"Error: no test specified\" && exit 1",
