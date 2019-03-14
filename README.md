@@ -1,5 +1,5 @@
 <p align="center">
-  <a href="https://github.com/Kibibit/bramch-it" target="blank"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/16/COLD_DECK_LOG_STORAGE_AT_OLYMPIA._THIS_METHOD_IS_PREFERABLE_TO_RAFTING_LOGS_ON_WATER_WHICH_CAUSES_WATER_DETERIORATION_-_NARA_-_552203.jpg/810px-COLD_DECK_LOG_STORAGE_AT_OLYMPIA._THIS_METHOD_IS_PREFERABLE_TO_RAFTING_LOGS_ON_WATER_WHICH_CAUSES_WATER_DETERIORATION_-_NARA_-_552203.jpg" width="150" ></a>
+  <a href="https://github.com/Kibibit/cold-deck" target="blank"><img src="http://kibibit.io/kibibit-assets/kb-cold-deck-logo.png" width="150" ></a>
   <h2 align="center">
     @kibibit/cold-deck
   </h2>
