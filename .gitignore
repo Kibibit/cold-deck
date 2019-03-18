@@ -6,3 +6,4 @@ package-lock.json
 lib/
 coverage/
 test-report.html
+public/kb-cd-ui/

@@ -9,6 +9,7 @@ import flash from 'connect-flash';
 import { isEmpty, isArray } from 'lodash';
 import marked from 'marked';
 import Octokit from '@octokit/rest';
+import path from 'path';
 
 interface KbGithubClient {
   githubClientId: string;
@@ -86,7 +87,8 @@ export function kbAuthenticatedRoute(githubClient: KbGithubClient, allowedOrgani
   webPanel.use(errorHandler);
 
   webPanel.get('/', ensureAuthenticated, function (req, res) {
-    res.render('index.ejs', { user: req.user });
+    // res.render('index.', { user: req.user });
+    res.sendFile(path.join(__dirname + '/../../public/kb-cd-ui/index.html'));
   });
 
   webPanel.get('/account', ensureAuthenticated, function (req, res) {

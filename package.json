@@ -5,13 +5,15 @@
   "types": "lib/index.d.ts",
   "main": "lib/index.js",
   "files": [
-    "/lib"
+    "/lib",
+    "/views",
+    "/public"
   ],
   "bin": {
     "cold-deck": "lib/kb-access-setup.js"
   },
   "scripts": {
-    "build": "tsc",
+    "build": "npm run app-install && tsc && npm run build:client",
     "test": "jest --coverage",
     "coveralls": "npm run test && cat ./coverage/lcov.info | coveralls",
     "semantic-release": "semantic-release",
