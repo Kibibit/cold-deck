@@ -9,6 +9,7 @@ import flash from 'connect-flash';
 import { isEmpty, isArray } from 'lodash';
 import marked from 'marked';
 import Octokit from '@octokit/rest';
+import path from 'path';
 
 interface KbGithubClient {
   githubClientId: string;
@@ -16,7 +17,7 @@ interface KbGithubClient {
   redirectUrl: string;
 }
 
-export function kbAuthenticatedRoute(githubClient: KbGithubClient, allowedOrganization?: string, allowedUsers?: string[]) {
+export function kbAuthenticatedRoute(githubClient: KbGithubClient, allowedOrganization?: string, allowedUsers?: string[]): express.Express {
   // Passport session setup.
   //   To support persistent login sessions, Passport needs to be able to
   //   serialize users into and deserialize users out of the session.  Typically,
@@ -67,8 +68,11 @@ export function kbAuthenticatedRoute(githubClient: KbGithubClient, allowedOrgani
     }
   ));
 
-  const webPanel: Router = express.Router();
+  const webPanel = express();
 
+  webPanel.set('views', __dirname + '/../../views');
+  webPanel.set('view engine', 'ejs');
+  webPanel.set('view engine', 'html');
   webPanel.use(partials());
   webPanel.use(bodyParser.urlencoded({ extended: true }));
   webPanel.use(bodyParser.json());
@@ -79,39 +83,21 @@ export function kbAuthenticatedRoute(githubClient: KbGithubClient, allowedOrgani
   webPanel.use(passport.initialize());
   webPanel.use(passport.session());
   webPanel.use(flash());
-  webPanel.use(express.static(__dirname + '/public'));
+  webPanel.use(express.static(__dirname + '/../../public'));
   webPanel.use(errorHandler);
 
-  // var app = express();
-
-  // // configure Express
-  // app.set('views', __dirname + '/../../views');
-  // app.set('view engine', 'ejs');
-  // app.use(partials());
-  // app.use(bodyParser.urlencoded({ extended: true }));
-  // app.use(bodyParser.json());
-  // app.use(methodOverride());
-  // app.use(session({ secret: 'keyboard cat', resave: false, saveUninitialized: false }));
-  // // Initialize Passport!  Also use passport.session() middleware, to support
-  // // persistent login sessions (recommended).
-  // app.use(passport.initialize());
-  // app.use(passport.session());
-  // app.use(flash());
-  // app.use(express.static(__dirname + '/public'));
-  // app.use(errorHandler);
-
-
-  webPanel.get('/', function (req, res) {
-    res.render('index', { user: req.user });
+  webPanel.get('/', ensureAuthenticated, function (req, res) {
+    // res.render('index.', { user: req.user });
+    res.sendFile(path.join(__dirname + '/../../public/kb-cd-ui/index.html'));
   });
 
   webPanel.get('/account', ensureAuthenticated, function (req, res) {
-    res.render('account', { user: req.user });
+    res.render('account.ejs', { user: req.user });
   });
 
   webPanel.get('/login', function (req, res) {
     const message = req.flash('error').map((msg) => marked(msg));
-    res.render('login', { user: req.user, message: message });
+    res.render('login.ejs', { user: req.user, message: message });
   });
 
   // GET /auth/github
@@ -128,14 +114,19 @@ export function kbAuthenticatedRoute(githubClient: KbGithubClient, allowedOrgani
   //   which, in this example, will redirect the user to the home page.
   webPanel.get('/auth/github/callback',
     passport.authenticate('github', {
-      successRedirect: '/account',
+      successRedirect: '../../account',
       failureFlash: true,
-      failureRedirect: '/login'
+      failureRedirect: '../../login'
     }));
 
   webPanel.get('/logout', function (req, res) {
     req.logout();
     res.redirect('/');
+  });
+
+  webPanel.get('*', function (req, res) {
+    res.status(404);
+    res.render('error.ejs', { error: `the page you are looking for can't be found`, statusCode: 404 });
   });
 
   // app.listen(3000);
@@ -150,12 +141,12 @@ export function kbAuthenticatedRoute(githubClient: KbGithubClient, allowedOrgani
   //   login page.
   function ensureAuthenticated(req, res, next) {
     if (req.isAuthenticated()) { return next(); }
-    res.redirect('/login')
+    res.redirect('./login');
   }
 
   function errorHandler(err, req, res, next) {
     res.status(500);
-    res.render('error', { error: err });
+    res.render('error.ejs', { error: err, statusCode: 500 });
   }
 
 };

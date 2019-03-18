@@ -18,6 +18,7 @@ jobs:
     - stage: test
       node_js: lts/*
       script:
+        - npm run build
         - npm run coveralls
     - stage: release
       node_js: lts/*
