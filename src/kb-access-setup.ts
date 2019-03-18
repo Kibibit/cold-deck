@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 import { Answers, InputStreamOption, Question, Questions, prompt } from 'inquirer';
 import { isFunction } from 'lodash';
 import pify from 'pify';
