@@ -8,20 +8,6 @@ interface KbMiddlewareOptions {
     redirectUrl: string;
   }
 }
-// EXAMPLE
-// import express = require('express');
-//
-// const githubClientId = 'CLIENT_ID';
-// const githubClientSecret = 'CLIENT_SECRET';
-// const redirectUrl = 'REDIRECT_URL';
-
-// const githubClient = { githubClientId, githubClientSecret, redirectUrl };
-
-// const app = express();
-
-// app.use('/logs', kbMiddleware({ githubClient }, 'kibibit'));
-
-// app.listen(3000);
 
 export function kbMiddleware(options: KbMiddlewareOptions, allowedOrganization?: string, allowedUsers?: string[]) {
   if (options.githubClient) {
