@@ -1,7 +1,8 @@
 import { kbAuthenticatedRoute } from './kb-authenticated-route';
 import { kbUnAuthenticatedRoute } from './kb-unauthenticated-route';
+import { ColdDeck } from '../cold-deck';
 
-interface KbMiddlewareOptions {
+export interface KbMiddlewareOptions {
   githubClient?: {
     githubClientId: string;
     githubClientSecret: string;
@@ -9,10 +10,10 @@ interface KbMiddlewareOptions {
   }
 }
 
-export function kbMiddleware(options: KbMiddlewareOptions, allowedOrganization?: string, allowedUsers?: string[]) {
+export function kbMiddleware(coldDeck: ColdDeck, options: KbMiddlewareOptions, allowedOrganization?: string, allowedUsers?: string[]) {
   if (options.githubClient) {
-    return kbAuthenticatedRoute(options.githubClient, allowedOrganization, allowedUsers);
+    return kbAuthenticatedRoute(coldDeck, options.githubClient, allowedOrganization, allowedUsers);
   }
 
-  return kbUnAuthenticatedRoute();
+  return kbUnAuthenticatedRoute(coldDeck);
 };

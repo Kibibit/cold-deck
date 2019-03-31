@@ -32,7 +32,7 @@ export const coldDeckDefaultOptions: KbColdDeckOptions = {
 
 const consolePrettyPrint = winston.format.printf(({ level, message, scope, timestamp, tags }) => {
   const parsedTimestamp = moment(timestamp).format('YYYY-MM-DD [||] HH:mm:ss');
-  const parsedTags = map(tags, (tag) => colors[ tag.colors ](`[${ tag.msg }]`));
+  const parsedTags = map(tags, (tag) => get(colors, tag.colors)(`[${ tag.msg }]`));
 
   let parsedLabel = parseScope(scope);
   parsedLabel = parsedLabel ? ` ${ parsedLabel }` : '';

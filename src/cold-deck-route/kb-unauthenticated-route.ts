@@ -2,8 +2,9 @@ import bodyParser from 'body-parser';
 import express from 'express';
 import partials from 'express-partials';
 import methodOverride from 'method-override';
+import { ColdDeck } from '../cold-deck';
 
-export function kbUnAuthenticatedRoute(): express.Express {
+export function kbUnAuthenticatedRoute(coldDeck: ColdDeck): express.Express {
 
   const webPanel = express();
 
