@@ -4,6 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
+    "start:dev": "ng serve --proxy-config proxy.config.json",
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
@@ -21,6 +22,7 @@
     "@angular/platform-browser-dynamic": "~7.2.0",
     "@angular/router": "~7.2.0",
     "@davinkevin/jest": "^0.1.0",
+    "ansi-to-html": "^0.6.10",
     "bulmaswatch": "^0.7.2",
     "core-js": "^2.5.4",
     "rxjs": "~6.3.3",
