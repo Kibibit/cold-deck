@@ -7,3 +7,15 @@ body {
 html {
   background-color: #212121;
 }
+
+app-root {
+  display: flex;
+  flex-direction: column;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+
+  nav.navbar {
+    height: 3.25rem;
+  }
+}

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { lowerCase } from 'lodash';
+import { lowerCase, forEach, isString } from 'lodash';
+import { DomSanitizer } from '@angular/platform-browser';
 
 interface KbUser {
   displayName: string;
@@ -16,6 +17,7 @@ interface KbLog {
   scope: string | { msg: string; colors: string };
   timestamp: string;
   tags?: string | { msg: string; colors: string };
+  icon?: string;
 }
 
 interface KbLogs {
@@ -32,7 +34,7 @@ export class AppComponent implements OnInit {
   loggedInUser: KbUser;
   logs: KbLog[];
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private sanitized: DomSanitizer) { }
 
   ngOnInit(): void {
     this.http.get<KbUser>('./user')
@@ -48,7 +50,38 @@ export class AppComponent implements OnInit {
         console.log(logs);
 
         this.logs = logs.logs;
+
+        forEach(this.logs, (log) => {
+          const levelName = isString(log.level) ? log.level.toLowerCase() : log.level.msg.toLowerCase();
+          if (levelName === 'info') {
+            return log.icon = 'info';
+          }
+
+          if (levelName === 'warn') {
+            return log.icon = 'warning';
+          }
+
+          if (levelName === 'error') {
+            return log.icon = 'block';
+          }
+
+          log.icon = '';
+        });
       });
+  }
+
+  getTagStyle(tag: string | { msg: string; colors: string }) {
+    if (isString(tag)) { return ''; }
+
+    let style = '';
+
+    style += tag.colors.indexOf('bgYellow') > -1 ? 'background: hsl(48, 100%, 67%);' : '';
+    style += tag.colors.indexOf('magenta') > -1 ? 'color: hsl(348, 100%, 61%);' : '';
+    style += tag.colors.indexOf('red') > -1 ? 'color: hsl(348, 100%, 61%);' : '';
+    style += tag.colors.indexOf('grey') > -1 ? 'color: hsl(0, 0%, 71%);' : '';
+    style += tag.colors.indexOf('green') > -1 ? 'color: hsl(141, 71%, 48%);' : '';
+
+    return this.sanitized.bypassSecurityTrustStyle(style);
   }
 
   getColor(logLevel?: string) {

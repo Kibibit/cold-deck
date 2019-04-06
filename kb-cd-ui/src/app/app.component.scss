@@ -1,3 +1,5 @@
+@import '../kb-mixin.scss';
+
 .kb-title {
   font-family: 'Lobster Two', cursive;
   font-size: 2rem;
@@ -40,11 +42,14 @@
 .kb-logs {
   font-family: Hack, monospace;
   font-size: 0.8em;
+  overflow-y: auto;
+  height: calc(100% - 80px);
+  // @include scrolling-shadows;
 }
 
 .kb-log {
   display: flex;
-  align-items: center;
+  align-items: stretch;
   padding: 0 1em;
 
   >* {
@@ -59,11 +64,16 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    color: attr(color);
+    margin-top: 0.3em;
+    margin-bottom: 0.3em;
   }
 
   .kb-row-num {
     width: 35px;
+  }
+
+  .kb-scope {
+    width: 83px;
   }
 }
 
@@ -87,10 +97,19 @@
   }
 }
 
-.kb-tag {
-  display: inline-block;
-  padding: 0.2em;
-  margin: 0 0.2em;
-  border-radius: 0.1em;
-  background: rebeccapurple;
+.kb-tags {
+  width: 300px;
+  background: black;
+
+  .kb-tag {
+    display: inline-block;
+    padding: 0.2em;
+    margin: 0 0.2em;
+    border-radius: 0.1em;
+    // background: rebeccapurple;
+  }
+}
+
+.main-section {
+  height: calc(100% - 3.25rem);
 }
