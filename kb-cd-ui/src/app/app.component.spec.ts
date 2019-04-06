@@ -1,15 +1,19 @@
 import { TestBed, async } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { AppComponent } from './app.component';
+import { AnsiPipe } from './ansi.pipe';
+import { HttpClientModule } from '@angular/common/http';
 
 describe('AppComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
+        HttpClientModule,
         RouterTestingModule
       ],
       declarations: [
-        AppComponent
+        AppComponent,
+        AnsiPipe,
       ],
     }).compileComponents();
   }));
@@ -26,10 +30,10 @@ describe('AppComponent', () => {
     expect(app.title).toEqual('kb-cd-ui');
   });
 
-  it('should render title in a h1 tag', () => {
+  it('should render title in the navbar', () => {
     const fixture = TestBed.createComponent(AppComponent);
     fixture.detectChanges();
     const compiled = fixture.debugElement.nativeElement;
-    expect(compiled.querySelector('h1').textContent).toContain('Welcome to kb-cd-ui!');
+    expect(compiled.querySelector('nav .kb-title').textContent).toContain('cold-deck');
   });
 });
