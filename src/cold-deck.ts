@@ -7,6 +7,8 @@ import { coldDeckDefaultOptions, firebaseAppMapper, kbDefaultLogLevels, kbFormat
 import { createExpressLogger } from './expressLogger';
 import { KbFirebaseTransport } from './firebase.transport';
 import { KbColdDeckOptions, KbLogger, KbLoggerOptions } from './interfaces';
+import { KbLowDbTransport } from './lowdb.transport';
+import { kbMiddleware, KbMiddlewareOptions } from './cold-deck-route/cold-deck-route';
 
 export class ColdDeck {
   /* All the loggers created with cold deck. holds all child loggers */
@@ -39,6 +41,10 @@ export class ColdDeck {
     return createExpressLogger(this, options);
   }
 
+  expressMiddleware(options: KbMiddlewareOptions, allowedOrganization?: string, allowedUsers?: string[]) {
+    return kbMiddleware(this, options, allowedOrganization, allowedUsers);
+  }
+
   /**
    * Create a new child logger based on this instance of ColdDeck
    */
@@ -66,11 +72,9 @@ export class ColdDeck {
       defaultMeta: { scope: options.scope || 'global' },
       transports: options.transports || [
         //
-        // - Write to all logs with level `info` and below to `combined.log` 
-        // - Write all logs error (and below) to `error.log`.
+        // - Write all log levels to a daily basis JSON database file under given path
         //
-        new winston.transports.File({ filename: path.join(this.globalOptions.path, '/error.log'), level: 'error' }),
-        new winston.transports.File({ filename: path.join(this.globalOptions.path, '/combined.log') })
+        new KbLowDbTransport({ folder: path.join(this.globalOptions.path) })
       ]
     });
 

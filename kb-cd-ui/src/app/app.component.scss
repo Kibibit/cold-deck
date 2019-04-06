@@ -1,0 +1,115 @@
+@import '../kb-mixin.scss';
+
+.kb-title {
+  font-family: 'Lobster Two', cursive;
+  font-size: 2rem;
+  margin-left: 0.2em;
+}
+
+.hour-graph {
+  display: flex;
+  height: 80px;
+  width: 100%;
+  position: relative;
+  background: rgba(0, 0, 0, 0.3);
+
+  .single-hour {
+    padding: 0 2px;
+    flex: auto;
+    border-left: 1px solid rgba(148, 148, 148, 0.07);
+    justify-content: center;
+    position: relative;
+
+    &:first-child {
+      border-left: none;
+    }
+
+    .hour-label {
+      position: absolute;
+      left: 3px;
+      right: 3px;
+      top: 5px;
+      font-size: 0.6em;
+      text-align: center;
+      letter-spacing: 1px;
+      line-height: 10px;
+      pointer-events: none;
+      -webkit-font-smoothing: auto;
+    }
+  }
+}
+
+.kb-logs {
+  font-family: Hack, monospace;
+  font-size: 0.8em;
+  overflow-y: auto;
+  height: calc(100% - 80px);
+  // @include scrolling-shadows;
+}
+
+.kb-log {
+  display: flex;
+  align-items: stretch;
+  padding: 0 1em;
+
+  >* {
+    margin: 0 0.2em;
+  }
+
+  .kb-scope,
+  .kb-level {
+    text-transform: uppercase;
+    font-weight: bold;
+    padding: 0.1em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 0.3em;
+    margin-bottom: 0.3em;
+  }
+
+  .kb-row-num {
+    width: 35px;
+  }
+
+  .kb-scope {
+    width: 83px;
+  }
+}
+
+.search {
+  flex-grow: 1;
+
+  input {
+    display: none;
+  }
+}
+
+.logged-in-user {
+  display: flex;
+  align-items: center;
+  padding: 0 0.5em;
+
+  img {
+    height: 3em;
+    border-radius: 50%;
+    margin-right: 0.3em;
+  }
+}
+
+.kb-tags {
+  width: 300px;
+  background: black;
+
+  .kb-tag {
+    display: inline-block;
+    padding: 0.2em;
+    margin: 0 0.2em;
+    border-radius: 0.1em;
+    // background: rebeccapurple;
+  }
+}
+
+.main-section {
+  height: calc(100% - 3.25rem);
+}

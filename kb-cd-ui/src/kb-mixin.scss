@@ -1,0 +1,14 @@
+@mixin scrolling-shadows($background-color: transparent, $shadow-intensity: 0.2, $shadow-color: black, $cover-size: 40px, $shadow-size: 14px) {
+  // Shadow covers
+  background: linear-gradient($background-color 30%, rgba($background-color, 0)), linear-gradient(rgba($background-color, 0), $background-color 70%) 0 100%,
+    radial-gradient(50% 0, farthest-side, rgba($shadow-color, $shadow-intensity), rgba($shadow-color, 0)), radial-gradient(50% 100%, farthest-side, rgba($shadow-color, $shadow-intensity), rgba($shadow-color, 0)) 0 100%;
+  background: linear-gradient($background-color 30%, rgba($background-color, 0)), linear-gradient(rgba($background-color, 0), $background-color 70%) 0 100%,
+    radial-gradient(farthest-side at 50% 0, rgba($shadow-color, $shadow-intensity), rgba($shadow-color, 0));
+  // also add button shadow:
+  //radial-gradient(farthest-side at 50% 100%, rgba($shadow-color,$shadow-intensity), rgba($shadow-color,0)) 0 100%;
+  background-repeat: no-repeat;
+  background-color: $background-color;
+  background-size: 100% $cover-size, 100% $cover-size, 100% $shadow-size, 100% $shadow-size;
+  // Opera doesn't support this in the shorthand
+  background-attachment: local, local, scroll, scroll;
+}

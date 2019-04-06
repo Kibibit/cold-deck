@@ -6,10 +6,23 @@ import methodOverride from 'method-override';
 import passport from 'passport';
 import { Strategy as GitHubStrategy } from 'passport-github2';
 import flash from 'connect-flash';
-import { isEmpty, isArray } from 'lodash';
+import { isEmpty, isArray, compact } from 'lodash';
 import marked from 'marked';
 import Octokit from '@octokit/rest';
 import path from 'path';
+import fs from 'fs-extra';
+import lowdb from 'lowdb';
+import FileAsync from 'lowdb/adapters/FileAsync';
+import moment from 'moment';
+import { ColdDeck } from '../cold-deck';
+
+interface KbUser {
+  displayName: string;
+  emails: string[];
+  organizations: string[];
+  username: string;
+  avatar: string;
+}
 
 interface KbGithubClient {
   githubClientId: string;
@@ -17,7 +30,7 @@ interface KbGithubClient {
   redirectUrl: string;
 }
 
-export function kbAuthenticatedRoute(githubClient: KbGithubClient, allowedOrganization?: string, allowedUsers?: string[]): express.Express {
+export function kbAuthenticatedRoute(coldDeck: ColdDeck, githubClient: KbGithubClient, allowedOrganization?: string, allowedUsers?: string[]): express.Express {
   // Passport session setup.
   //   To support persistent login sessions, Passport needs to be able to
   //   serialize users into and deserialize users out of the session.  Typically,
@@ -84,6 +97,7 @@ export function kbAuthenticatedRoute(githubClient: KbGithubClient, allowedOrgani
   webPanel.use(passport.session());
   webPanel.use(flash());
   webPanel.use(express.static(__dirname + '/../../public'));
+  webPanel.use(coldDeck.expressLogger());
   webPanel.use(errorHandler);
 
   webPanel.get('/', ensureAuthenticated, function (req, res) {
@@ -91,8 +105,15 @@ export function kbAuthenticatedRoute(githubClient: KbGithubClient, allowedOrgani
     res.sendFile(path.join(__dirname + '/../../public/kb-cd-ui/index.html'));
   });
 
-  webPanel.get('/account', ensureAuthenticated, function (req, res) {
-    res.render('account.ejs', { user: req.user });
+  webPanel.get('/user', ensureAuthenticated, function (req, res) {
+    const user: KbUser = {
+      displayName: req.user.displayName,
+      emails: req.user.emails.map((emailObj) => emailObj.value),
+      organizations: req.user.organizations,
+      username: req.user.username,
+      avatar: req.user.photos[ 0 ].value
+    };
+    res.json(user);
   });
 
   webPanel.get('/login', function (req, res) {
@@ -114,7 +135,7 @@ export function kbAuthenticatedRoute(githubClient: KbGithubClient, allowedOrgani
   //   which, in this example, will redirect the user to the home page.
   webPanel.get('/auth/github/callback',
     passport.authenticate('github', {
-      successRedirect: '../../account',
+      successRedirect: '../../',
       failureFlash: true,
       failureRedirect: '../../login'
     }));
@@ -122,6 +143,33 @@ export function kbAuthenticatedRoute(githubClient: KbGithubClient, allowedOrgani
   webPanel.get('/logout', function (req, res) {
     req.logout();
     res.redirect('/');
+  });
+
+  webPanel.get('/logs', function (req, res, next) {
+    const day = moment.utc().format('YYYY-MM-DD');
+    const adapter = new FileAsync(process.cwd() + `/logs/${ day }.json`);
+
+    fs.ensureFile(process.cwd() + `/logs/${ day }.json`)
+      .then(() => lowdb(adapter))
+      .then((db) => {
+        // send this day's database
+        const todaysLogs = db.getState();
+
+        res.json(todaysLogs);
+
+        // we later need to also open a web-socket channel to update for changes in today's logs' wdb
+      })
+      .catch((err) => next(err));
+    // fs.readFile(process.cwd() + '/logs/combined.log', 'utf8', (err, fileContent) => {
+    //   if (err) { return next(err); }
+
+    //   try {
+    //     const logs = compact(fileContent.split('\n')).map((json) => JSON.parse(json));
+    //     res.json({ logs });
+    //   } catch (err) {
+    //     next(err);
+    //   }
+    // });
   });
 
   webPanel.get('*', function (req, res) {

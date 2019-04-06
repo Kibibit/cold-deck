@@ -1,1 +1,21 @@
 /* You can add global styles to this file, and also import other style files */
+
+body {
+  font-family: 'Comfortaa', cursive;
+}
+
+html {
+  background-color: #212121;
+}
+
+app-root {
+  display: flex;
+  flex-direction: column;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+
+  nav.navbar {
+    height: 3.25rem;
+  }
+}
