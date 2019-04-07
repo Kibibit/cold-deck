@@ -4,6 +4,8 @@ import * as winston from 'winston';
 import { isString, isObject, get, map, uniqueId } from 'lodash';
 import { KbColdDeckOptions } from './interfaces';
 
+// keeps consts and default values
+
 export const firebaseAppMapper = {};
 
 export const kbDefaultLogLevels = {
