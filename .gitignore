@@ -2,7 +2,6 @@ node_modules/
 logs/
 .env*
 firebase-*
-package-lock.json
 lib/
 coverage/
 test-report.html

@@ -1,14 +1,10 @@
 sudo: false
 language: node_js
-cache:
-  directories:
-    - ~/.npm
+cache: npm
 node_js:
   - "8.3"
 notifications:
   email: false
-script:
-  - npm run test
 stages:
   # - compile
   - test
@@ -18,11 +14,12 @@ jobs:
     - stage: test
       node_js: lts/*
       script:
-        - npm run build
+        - npm run install:client
         - npm run coveralls
     - stage: release
       node_js: lts/*
       script:
+        - npm run install:client
         - npm run build
         - npm run semantic-release
 branches:

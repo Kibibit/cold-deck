@@ -1,6 +1,6 @@
 {
   "name": "@kibibit/cold-deck",
-  "version": "1.4.0",
+  "version": "1.4.0-next.3",
   "description": "logs module",
   "types": "lib/index.d.ts",
   "main": "lib/index.js",
@@ -13,7 +13,7 @@
     "cold-deck": "lib/kb-access-setup.js"
   },
   "scripts": {
-    "build": "npm run app-install && tsc && npm run build:client",
+    "build": "tsc && npm run build:client",
     "test": "jest --coverage",
     "coveralls": "npm run test && cat ./coverage/lcov.info | coveralls",
     "semantic-release": "semantic-release",
