@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { lowerCase, forEach, isString } from 'lodash';
+import { Component, OnInit } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
+import { forEach, isString, lowerCase } from 'lodash';
 
 interface KbUser {
   displayName: string;
