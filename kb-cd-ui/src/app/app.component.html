@@ -9,12 +9,12 @@
            height="28">
       <span class="kb-title">cold-deck</span>
     </a>
-    <div class="search"><input placeholder="Search..."></div>
-    <div class="logged-in-user"
-         *ngIf="loggedInUser">
-      <img [src]="loggedInUser.avatar">
-      <span class="kb-username">{{ loggedInUser.username }}</span>
-    </div>
+  </div>
+  <div class="search"><input placeholder="Search..."></div>
+  <div class="logged-in-user"
+       *ngIf="loggedInUser">
+    <img [src]="loggedInUser.avatar">
+    <span class="kb-username">{{ loggedInUser.username }}</span>
   </div>
 </nav>
 <section class="main-section">
