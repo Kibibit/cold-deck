@@ -1,6 +1,6 @@
 {
   "name": "@kibibit/cold-deck",
-  "version": "1.5.0",
+  "version": "1.4.0-next.7",
   "description": "logs module",
   "types": "lib/index.d.ts",
   "main": "lib/index.js",
@@ -14,6 +14,7 @@
   },
   "scripts": {
     "build": "tsc && npm run build:client",
+    "test:watch": "jest --watchAll",
     "test": "jest --coverage",
     "coveralls": "npm run test && cat ./coverage/lcov.info | coveralls",
     "semantic-release": "semantic-release",
@@ -94,6 +95,7 @@
     "url": "https://github.com/Kibibit/cold-deck.git"
   },
   "dependencies": {
+    "@nestjs/common": "^6.1.1",
     "@octokit/rest": "^16.19.0",
     "body-parser": "^1.18.3",
     "callsite": "^1.0.0",
