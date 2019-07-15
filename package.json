@@ -23,40 +23,62 @@
     "update:dep": "npm-check",
     "app-install": "npm install && npm run install:client",
     "install:client": "cd kb-cd-ui && npm install",
-    "build:client": "cd kb-cd-ui && ng build --prod --aot"
+    "build:client": "cd kb-cd-ui && ng build --prod --aot",
+    "announce": "announce-it"
   },
   "author": "neilkalman@gmail.com",
   "license": "MIT",
+  "announcements": {
+    "tweet": "It's time to neatly pile all your logs.\nCold-Deck: a pile of logs stored away from the immediate area where logging is taking place.\n<%= package %> <%= version %> in out!\n\n<%= npmpage %>"
+  },
   "release": {
     "branches": [
-      "+([1-9])?(.{+([1-9]),x}).x",
       "master",
-      {
-        "name": "beta",
-        "prerelease": true
-      },
       {
         "name": "next",
         "prerelease": true
       }
     ],
-    "plugins": [
-      "@semantic-release/release-notes-generator",
-      "@semantic-release/github",
+    "npmPublish": true,
+    "analyzeCommits": [
+      "@semantic-release/commit-analyzer"
+    ],
+    "verifyConditions": [
       "@semantic-release/npm",
+      "@semantic-release/git",
+      "@semantic-release/github"
+    ],
+    "prepare": [
+      "@semantic-release/npm",
+      {
+        "path": "@semantic-release/git",
+        "assets": [
+          "package.json"
+        ],
+        "message": "chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
+      }
+    ],
+    "publish": [
+      "@semantic-release/npm",
+      "@semantic-release/github"
+    ],
+    "success": [
+      "@semantic-release/github",
       [
-        "@semantic-release/git",
+        "@semantic-release/exec",
         {
-          "assets": [
-            "package.json"
-          ],
-          "message": "chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
+          "successCmd": "npm run announce -- --branch $TRAVIS_BRANCH"
         }
       ]
+    ],
+    "fail": [
+      "@semantic-release/github"
     ]
   },
   "devDependencies": {
+    "@kibibit/announce-it": "^2.0.0",
     "@semantic-release/commit-analyzer": "^6.1.0",
+    "@semantic-release/exec": "^3.4.0-beta.2",
     "@semantic-release/git": "^7.1.0-beta.3",
     "@semantic-release/github": "^5.2.10",
     "@semantic-release/npm": "^5.1.4",
@@ -84,7 +106,7 @@
     "jest-html-reporter": "^2.5.0",
     "ncp": "^2.0.0",
     "npm-check": "^5.9.0",
-    "semantic-release": "^16.0.0-beta.18",
+    "semantic-release": "^16.0.0-beta.22",
     "semantic-release-cli": "^4.1.0",
     "ts-jest": "^24.0.0",
     "ts-node": "^8.0.3",
