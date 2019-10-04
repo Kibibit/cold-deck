@@ -22,7 +22,9 @@
     "update:dep": "npm-check",
     "app-install": "npm install && npm run install:client",
     "install:client": "cd kb-cd-ui && npm install",
-    "build:client": "cd kb-cd-ui && ng build --prod --aot"
+    "build:client": "cd kb-cd-ui && ng build --prod --aot",
+    "snyk-protect": "snyk protect",
+    "prepare": "npm run snyk-protect"
   },
   "author": "neilkalman@gmail.com",
   "license": "MIT",
@@ -116,12 +118,14 @@
     "passport-github2": "^0.1.11",
     "pify": "^4.0.1",
     "travis-ci": "^2.2.0",
-    "winston": "^3.2.1"
+    "winston": "^3.2.1",
+    "snyk": "^1.230.5"
   },
   "jest": {
     "projects": [
       "kb-cd-ui/jest.config.js",
       "src/jest.config.js"
     ]
-  }
+  },
+  "snyk": true
 }
