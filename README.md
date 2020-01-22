@@ -1,5 +1,5 @@
 <p align="center">
-  <a href="https://github.com/Kibibit/cold-deck" target="blank"><img src="http://kibibit.io/kibibit-assets/kb-cold-deck-logo.png" width="150" ></a>
+  <a href="https://github.com/Kibibit/cold-deck" target="blank"><img src="http://kibibit.io/kibibit-assets/cold-deck/logo.svg" width="150" ></a>
   <h2 align="center">
     @kibibit/cold-deck
   </h2>
