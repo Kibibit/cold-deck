@@ -108,7 +108,7 @@
     "inquirer": "^6.2.2",
     "lodash": "^4.17.11",
     "lowdb": "^1.0.0",
-    "marked": "^0.6.1",
+    "marked": "^1.1.1",
     "method-override": "^3.0.0",
     "mkdirp": "^0.5.1",
     "moment": "^2.24.0",
