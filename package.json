@@ -106,7 +106,7 @@
     "firebase-admin": "^7.0.0",
     "fs-extra": "^7.0.1",
     "inquirer": "^6.2.2",
-    "lodash": "^4.17.11",
+    "lodash": "^4.17.17",
     "lowdb": "^1.0.0",
     "marked": "^0.6.1",
     "method-override": "^3.0.0",
